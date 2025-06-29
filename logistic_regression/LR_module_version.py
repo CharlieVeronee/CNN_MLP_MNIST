@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import datasets, transforms
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 
 class MNIST_Logistic_Regression(nn.Module):
     def __init__(self):
