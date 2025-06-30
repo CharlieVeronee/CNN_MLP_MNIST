@@ -1,23 +1,63 @@
 # MNIST Digit Classification with PyTorch
 
-- **Logistic Regression** (single-layer linear model)
-- **Multilayer Perceptron (MLP)** (with ReLU activation and hidden layers)
-- **Convolutional Neural Network (mini)** Image ->
-  convolution (32 3x3 filters) -> nonlinearity (ReLU) -> (2x2 max pool) ->
-  convolution (64 3x3 filters) -> nonlinearity (ReLU) -> (2x2 max pool) -> flatten -> fully connected (256 hidden units) -> nonlinearity (ReLU) ->
-  fully connected (10 hidden units) -> softmax
+- project implements and compares several neural network architectures on the MNIST dataset, a benchmark dataset of handwritten digits (0–9)
 
-- **Convolutional Neural Network (max)** Image ->
-  convolution (32 3x3 filters) -> nonlinearity (ReLU) ->
-  convolution (32 3x3 filters) -> nonlinearity (ReLU) -> (2x2 max pool) ->
-  convolution (64 3x3 filters) -> nonlinearity (ReLU) ->
-  convolution (64 3x3 filters) -> nonlinearity (ReLU) -> (2x2 max pool) -> flatten -> fully connected (256 hidden units) -> nonlinearity (ReLU) ->
-  fully connected (10 hidden units) -> softmax
+1. Logistic Regression:
+   A single fully connected layer mapping pixel values directly to digit classes.
 
-## Results
+- Input: 784 (28×28 flattened pixels)
+- Output: 10 (digit classes)
+- Activation: None (uses nn.CrossEntropyLoss)
+- Accuracy: ~90%
 
-Model Test Accuracy (MNIST)
-Logistic Regression: ~90%
-MLP (784 → 128 → 10): ~92%
-CNN_mini: (dimensions in comments): ~99.0%
-CNN_max: (dimensions in comments): ~99.2%
+2. Multilayer Perceptron (MLP)
+   A simple feedforward neural network with two hidden layer and ReLU activation.
+
+Architecture:
+
+- 784 → 500 → ReLU → 100 → ReLu → 10
+- Activation: ReLU
+- Loss: CrossEntropy
+- Accuracy: ~92%
+
+3. Convolutional Neural Network (CNN-Mini)
+   A small convolutional model using two conv-pool blocks.
+
+Architecture:
+
+Input (1×28×28) →
+
+Conv2d(1, 32, 5x5) → ReLU → MaxPool(2x2) →
+
+Conv2d(32, 64, 5x5) → ReLU → MaxPool(2x2) →
+
+Flatten →
+
+Linear(7×7×64, 256) → ReLU →
+
+Linear(256, 10)
+
+- Accuracy: ~99.0%
+
+4. Convolutional Neural Network (CNN-Max)
+   A deeper CNN inspired by VGG-style blocks with stacked convolutions before pooling.
+
+Architecture:
+
+Input (1×28×28) →
+
+Conv2d(1, 32, 5x5) → ReLU →
+
+Conv2d(32, 32, 5x5) → ReLU → MaxPool(2x2) →
+
+Conv2d(32, 64, 5x5) → ReLU →
+
+Conv2d(64, 64, 5x5) → ReLU → MaxPool(2x2) →
+
+Flatten →
+
+Linear(7×7×64, 256) → ReLU →
+
+Linear(256, 10)
+
+- Accuracy: ~99.2%
