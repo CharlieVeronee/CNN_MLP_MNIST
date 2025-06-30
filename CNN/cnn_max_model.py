@@ -8,7 +8,7 @@ from tqdm.auto import tqdm, trange
 
 #input is 100 x 1 x 28 x 28 (batch = 100, channels = 1 bc gray, height, width)
 #batch size = 100
-class MNIST_CNN(nn.Module):
+class MNIST_CNN_MAX(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 32, kernel_size=5, padding=2, stride = 1)
@@ -46,42 +46,42 @@ class MNIST_CNN(nn.Module):
         x = self.fc2(x)
         return x
 
-# Load the data
+#load the data
 mnist_train = datasets.MNIST(root="./datasets", train=True, transform=transforms.ToTensor(), download=True)
 mnist_test = datasets.MNIST(root="./datasets", train=False, transform=transforms.ToTensor(), download=True)
 train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=100, shuffle=True)
 test_loader = torch.utils.data.DataLoader(mnist_test, batch_size=100, shuffle=False)
 
-## Training
-# Instantiate model  
-model = MNIST_CNN()
+#training
+#instantiate model
+model = MNIST_CNN_MAX()
 
-# Loss and Optimizer
+#loss and optimizer
 criterion = nn.CrossEntropyLoss() #computes softmax for you
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)  #Adams optimization instead of SGD
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001) #Adams optimization instead of SGD
 
-# Iterate through train set minibatchs 
+#iterate through train set minibatchs 
 for epoch in trange(3):
     for images, labels in tqdm(train_loader):
-        # Zero out the gradients
+        #zero out the gradients
         optimizer.zero_grad()
 
-        # Forward pass
+        #forward pass
         x = images
         y = model(x)
         loss = criterion(y, labels)
-        # Backward pass
+        #backward pass
         loss.backward()
         optimizer.step()
 
-## Testing
+#testing
 correct = 0
 total = len(mnist_test)
 
 with torch.no_grad():
-    # Iterate through test set minibatchs 
+    #iterate through test set minibatchs 
     for images, labels in tqdm(test_loader):
-        # Forward pass
+        #forward pass
         x = images
         y = model(x)
 

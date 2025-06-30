@@ -10,14 +10,14 @@ from tqdm.auto import tqdm, trange
 #use ReLU activation functions for nonlinearities
 
 
-##SIZES
+#sizes:
 
 #input is 100 x 1 x 28 x 28 (batch = 100, channels = 1 bc gray, height, width)
 #conv2d (channels in = 1 bc gray, output channels / filters = 32, size of filter = 5x5, padding = 2)
 #conv2d (channels in = 32 from prev conv, output channels / filters = 64, size of filter = 5x5, padding = 2)
 
 #batch size = 100
-class MNIST_CNN(nn.Module):
+class MNIST_CNN_MINI(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 32, kernel_size=5, padding=2, stride = 1)
@@ -45,42 +45,42 @@ class MNIST_CNN(nn.Module):
         x = self.fc2(x)  #[100, 256] → [100, 10]
         return x
 
-# Load the data
+#load the data
 mnist_train = datasets.MNIST(root="./datasets", train=True, transform=transforms.ToTensor(), download=True)
 mnist_test = datasets.MNIST(root="./datasets", train=False, transform=transforms.ToTensor(), download=True)
 train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=100, shuffle=True)
 test_loader = torch.utils.data.DataLoader(mnist_test, batch_size=100, shuffle=False)
 
-## Training
-# Instantiate model  
-model = MNIST_CNN()
+#training
+#instantiate model  
+model = MNIST_CNN_MINI()
 
-# Loss and Optimizer
+#loss and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)  #Adams optimization instead of SGD
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001) #Adams optimization instead of SGD
 
-# Iterate through train set minibatchs 
+#iterate through train set minibatchs 
 for epoch in trange(3):
     for images, labels in tqdm(train_loader):
-        # Zero out the gradients
+        #zero out the gradients
         optimizer.zero_grad()
 
-        # Forward pass
+        #forward pass
         x = images #don't need to reshape images, already 4D
         y = model(x)
         loss = criterion(y, labels)
-        # Backward pass
+        #backward pass
         loss.backward()
         optimizer.step()
 
-## Testing
+#testing
 correct = 0
 total = len(mnist_test)
 
 with torch.no_grad():
-    # Iterate through test set minibatchs 
+    #iterate through test set minibatchs 
     for images, labels in tqdm(test_loader):
-        # Forward pass
+        #forward pass
         x = images
         y = model(x)
 

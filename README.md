@@ -7,7 +7,8 @@
 
 - Input: 784 (28×28 flattened pixels)
 - Output: 10 (digit classes)
-- Activation: None (uses nn.CrossEntropyLoss)
+- Activation: None
+- Loss: CrossEntropyLoss
 - Accuracy: ~90%
 
 2. Multilayer Perceptron (MLP)
